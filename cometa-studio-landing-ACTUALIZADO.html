@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cometa Studio - Edición de Video Premium</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #0a0a0a;
+      --orange: #ff6b1a;
+      --orange-light: #ff8c3a;
+      --orange-dark: #e55a00;
+      --gray-light: #f5f5f5;
+      --gray-dark: #1a1a1a;
+      --text-light: #ffffff;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black);
+      color: var(--text-light);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* HEADER / NAV */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 2px solid var(--orange);
+      padding: 1rem 2rem;
+    }
+
+    nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -2px;
+      white-space: nowrap;
+      margin-right: 3rem;
+    }
+
+    .logo span {
+      color: var(--orange);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      flex: 1;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--orange);
+    }
+
+    .cta-button {
+      background: var(--orange);
+      color: var(--black);
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+    }
+
+    .cta-button:hover {
+      background: var(--orange-light);
+      transform: translateY(-2px);
+    }
+
+    /* HERO */
+    .hero {
+      margin-top: 60px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--black) 0%, var(--gray-dark) 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, var(--orange) 0%, transparent 70%);
+      opacity: 0.05;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(50px, 50px); }
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -2px;
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    .hero-text h1 span {
+      color: var(--orange);
+      display: block;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #ccc;
+      margin-bottom: 2rem;
+      animation: slideInUp 0.8s ease-out 0.2s backwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      animation: slideInUp 0.8s ease-out 0.4s backwards;
+    }
+
+    .hero-buttons button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 4px;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--black);
+    }
+
+    .btn-primary:hover {
+      background: var(--orange-light);
+      transform: translateY(-3px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--orange);
+      border: 2px solid var(--orange);
+    }
+
+    .btn-secondary:hover {
+      background: var(--orange);
+      color: var(--black);
+    }
+
+    .hero-video {
+      position: relative;
+      animation: slideInRight 0.8s ease-out;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      aspect-ratio: 9/10;
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(255, 107, 26, 0.3);
+    }
+
+    .video-placeholder video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-play-icon {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* PAQUETES */
+    .packages {
+      padding: 6rem 2rem;
+      background: var(--black);
+      position: relative;
+    }
+
+    .packages::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .section-title h2 span {
+      color: var(--orange);
+    }
+
+    .section-title p {
+      font-size: 1.1rem;
+      color: #999;
+    }
+
+    .packages-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .package-card {
+      background: var(--gray-dark);
+      border: 2px solid var(--orange);
+      padding: 2rem;
+      border-radius: 8px;
+      position: relative;
+      transition: all 0.3s;
+      overflow: hidden;
+    }
+
+    .package-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(255, 107, 26, 0.2);
+    }
+
+    .package-card.featured {
+      border-color: var(--orange);
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+    }
+
+    .package-card.featured h3,
+    .package-card.featured .price,
+    .package-card.featured ul {
+      color: var(--black);
+    }
+
+    .package-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--orange);
+      color: var(--black);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .package-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--orange);
+    }
+
+    .package-card.featured h3 {
+      color: var(--black);
+    }
+
+    .price {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--orange);
+      margin-bottom: 0.5rem;
+    }
+
+    .price-period {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 1.5rem;
+    }
+
+    .package-card.featured .price-period {
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    .package-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .package-features li {
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      color: #ccc;
+      display: flex;
+      align-items: center;
+    }
+
+    .package-features li::before {
+      content: '✓';
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .package-card.featured .package-features li::before {
+      color: var(--black);
+    }
+
+    .package-card.featured .package-features li {
+      color: rgba(0, 0, 0, 0.85);
+    }
+
+    .package-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--orange);
+      color: var(--black);
+      border: none;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .package-btn:hover {
+      background: var(--orange-light);
+    }
+
+    .package-card.featured .package-btn {
+      background: var(--black);
+      color: var(--orange);
+    }
+
+    /* GALERÍA DE VIDEOS */
+    .video-gallery {
+      padding: 6rem 2rem;
+      background: var(--gray-dark);
+      position: relative;
+    }
+
+    .gallery-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .video-item {
+      aspect-ratio: 9/16;
+      background: var(--black);
+      border: 2px solid var(--orange);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .video-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 40px rgba(255, 107, 26, 0.3);
+    }
+
+    .video-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .video-item:hover .video-overlay {
+      opacity: 1;
+    }
+
+    .play-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+      font-size: 1.5rem;
+    }
+
+    /* CASOS DE ÉXITO */
+    .success-cases {
+      padding: 6rem 2rem;
+      background: var(--black);
+      position: relative;
+    }
+
+    .success-cases::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    }
+
+    .cases-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .case-card {
+      background: var(--gray-dark);
+      border-left: 4px solid var(--orange);
+      padding: 2rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .case-card:hover {
+      transform: translateX(10px);
+      box-shadow: 0 10px 40px rgba(255, 107, 26, 0.2);
+    }
+
+    .case-client {
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .case-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .case-stat {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--orange);
+    }
+
+    .case-description {
+      color: #999;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* TESTIMONIOS */
+    .testimonials {
+      padding: 6rem 2rem;
+      background: var(--gray-dark);
+      position: relative;
+    }
+
+    .testimonials-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial {
+      background: var(--black);
+      padding: 2rem;
+      border-radius: 8px;
+      border-top: 3px solid var(--orange);
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      color: #ccc;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--black);
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+
+    .author-info h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .author-role {
+      font-size: 0.8rem;
+      color: var(--orange);
+    }
+
+    /* CTA FINAL */
+    .final-cta {
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, var(--black) 0%, var(--gray-dark) 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--orange) 0%, transparent 70%);
+      opacity: 0.05;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .final-cta-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .final-cta h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .final-cta h2 span {
+      color: var(--orange);
+    }
+
+    .final-cta p {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+
+    .final-cta button {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: var(--orange);
+      color: var(--black);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .final-cta button:hover {
+      background: var(--orange-light);
+      transform: translateY(-3px);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      padding: 2rem;
+      border-top: 2px solid var(--orange);
+      text-align: center;
+      color: #999;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header {
+        padding: 0.75rem 1rem;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .logo {
+        font-size: 1.3rem;
+        margin-right: 0;
+      }
+
+      nav ul {
+        gap: 1rem;
+        font-size: 0.9rem;
+        order: 3;
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+
+      .cta-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .hero-content {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-text h1 {
+        font-size: 2rem;
+      }
+
+      .packages-grid,
+      .cases-grid,
+      .testimonials-grid,
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .final-cta h2 {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* SCROLL ANIMATIONS */
+    .fade-in {
+      opacity: 0;
+      animation: fadeInScroll 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeInScroll {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <div class="logo">Cometa<span>Studio</span></div>
+      <ul>
+        <li><a href="#paquetes">Paquetes</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#casos">Casos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <button class="cta-button">Consulta Gratis</button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Edición de video <span>que vende</span></h1>
+        <p>Contenido profesional entregado rápido. Para médicos, agencias y negocios en crecimiento.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary">Ver Paquetes</button>
+          <button class="btn-secondary">Ver Casos de Éxito</button>
+        </div>
+      </div>
+      <div class="hero-video">
+        <div class="video-placeholder">
+          <div class="video-play-icon">▶</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAQUETES -->
+  <section class="packages" id="paquetes">
+    <div class="section-title">
+      <h2>Suscripción <span>Flexible</span></h2>
+      <p>Sin contratos. Cancela cuando quieras. Escala según tu ritmo.</p>
+    </div>
+
+    <div class="packages-grid">
+      <!-- BASE -->
+      <div class="package-card">
+        <h3>Base</h3>
+        <div class="price">$5,900</div>
+        <div class="price-period">MXN / mes</div>
+        <ul class="package-features">
+          <li>Hasta 15 videos/mes</li>
+          <li>30-60 segundos c/u</li>
+          <li>1 request activo</li>
+          <li>Entrega en 72h</li>
+          <li>Edición básica</li>
+        </ul>
+        <button class="package-btn">Comenzar</button>
+      </div>
+
+      <!-- PRO (FEATURED) -->
+      <div class="package-card featured">
+        <div class="package-badge">Más Popular</div>
+        <h3>Pro</h3>
+        <div class="price">$9,900</div>
+        <div class="price-period">MXN / mes</div>
+        <ul class="package-features">
+          <li>Hasta 30 videos/mes</li>
+          <li>2 requests simultáneos</li>
+          <li>Entrega en 48h</li>
+          <li>Motion graphics básicos</li>
+          <li>Textos dinámicos</li>
+          <li>Transiciones avanzadas</li>
+        </ul>
+        <button class="package-btn">Comenzar</button>
+      </div>
+
+      <!-- ELITE -->
+      <div class="package-card">
+        <h3>Elite</h3>
+        <div class="price">$14,900</div>
+        <div class="price-period">MXN / mes</div>
+        <ul class="package-features">
+          <li>Edición ilimitada</li>
+          <li>Motion premium</li>
+          <li>Editor asignado</li>
+          <li>Asesoría mensual</li>
+          <li>Prioridad absoluta</li>
+          <li>Custom branding</li>
+        </ul>
+        <button class="package-btn">Comenzar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERÍA DE VIDEOS -->
+  <section class="video-gallery" id="galeria">
+    <div class="section-title">
+      <h2>Galería de <span>Trabajos</span></h2>
+      <p>Mira ejemplos reales de lo que podemos hacer para tu marca</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #ff6b1a, #ff8c3a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">🎬</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #ff8c3a, #ff6b1a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">🎥</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">✨</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #ff6b1a, #ff8c3a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">🚀</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #ff8c3a, #ff6b1a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">💎</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">🎯</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #ff6b1a, #ff8c3a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">🎞️</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+
+      <div class="video-item">
+        <div style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 3rem;">📹</span>
+        </div>
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASOS DE ÉXITO -->
+  <section class="success-cases" id="casos">
+    <div class="section-title">
+      <h2>Casos de <span>Éxito</span></h2>
+      <p>Clientes reales, resultados comprobados</p>
+    </div>
+
+    <div class="cases-grid">
+      <!-- Médicos en Expansión -->
+      <div class="case-card">
+        <div class="case-client">Médicos en Expansión</div>
+        <div class="case-title">De 0 a 110 videos en 1 mes</div>
+        <div class="case-stat">110+ 📹</div>
+        <div class="case-description">
+          Clínica médica que necesitaba escalar su presencia en redes. Pasamos de cero contenido a 110 videos mensuales en nuestro paquete ELITE. Ahora es su mejor canal de adquisición.
+        </div>
+      </div>
+
+      <!-- Alan - Cirujano -->
+      <div class="case-card">
+        <div class="case-client">Alan - Cirujano Vascular</div>
+        <div class="case-title">30 videos mensuales consistentes</div>
+        <div class="case-stat">30 📊</div>
+        <div class="case-description">
+          Especialista que quería posicionarse como referente. Con 30 videos/mes en formato educativo, creció su base de pacientes un 40% en 3 meses.
+        </div>
+      </div>
+
+      <!-- Dose - Agencia -->
+      <div class="case-card">
+        <div class="case-client">Dose - Agencia de Salud</div>
+        <div class="case-title">60 reels en 1 proyecto</div>
+        <div class="case-stat">60 🎬</div>
+        <div class="case-description">
+          Agencia que nos encargó editar 60 reels para múltiples clientes médicos. Entrega de calidad en 48h, ahora somos su partner de producción.
+        </div>
+      </div>
+
+      <!-- Brows by Selene -->
+      <div class="case-card">
+        <div class="case-client">Brows by Selene</div>
+        <div class="case-title">Estudio que escaló con videos</div>
+        <div class="case-stat">15+ 📹</div>
+        <div class="case-description">
+          Microempresa de microblading. Combinamos sesiones de grabación + edición. Ahora genera leads consistentes con nuestro contenido visual.
+        </div>
+      </div>
+
+      <!-- Denturi -->
+      <div class="case-card">
+        <div class="case-client">Denturi - Dentista</div>
+        <div class="case-title">Contenido educativo que convierte</div>
+        <div class="case-stat">20+ 🦷</div>
+        <div class="case-description">
+          Clínica dental con contenido educativo sobre procedimientos. Los videos educan mientras venden. +25% pacientes nuevos en 6 meses.
+        </div>
+      </div>
+
+      <!-- Brandon - Agencia Creativa -->
+      <div class="case-card">
+        <div class="case-client">Brandon - Agencia Creativa</div>
+        <div class="case-title">5+ videos diarios de IA</div>
+        <div class="case-stat">5+ 🤖</div>
+        <div class="case-description">
+          Agencia que produce contenido con IA y nosotros lo hacemos atractivo con edición premium. Modelo escalable y sostenible.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="testimonials">
+    <div class="section-title">
+      <h2>Qué dicen <span>nuestros clientes</span></h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="testimonial-text">
+          "En 1 mes pasamos a producir 110 videos. Cometa Studio fue clave para que escaláramos sin quebrar nuestro flujo interno."
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">ME</div>
+          <div class="author-info">
+            <h4>Médicos en Expansión</h4>
+            <div class="author-role">Clínica Médica</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="testimonial-text">
+          "Necesitaba 30 videos mensuales y quería que fueran profesionales. Con Cometa es consistente, rápido y confiable."
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">AV</div>
+          <div class="author-info">
+            <h4>Alan Vázquez</h4>
+            <div class="author-role">Cirujano Vascular</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial">
+        <div class="testimonial-text">
+          "Somos agencia y necesitábamos un partner confiable para editar videos. Cometa nos permite ofrecer servicio de calidad a nuestros clientes."
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">DO</div>
+          <div class="author-info">
+            <h4>Dose - Agencia</h4>
+            <div class="author-role">Agencia de Salud</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta" id="contacto">
+    <div class="final-cta-content">
+      <h2>Listo para escalar <span>tu contenido</span>?</h2>
+      <p>Consulta gratis. Sin compromiso. Descubre cómo podemos ayudarte a crecer.</p>
+      <button>Agendar Consulta Gratis</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 Cometa Studio. Edición de video premium para profesionales. | Contacto: studio@cometaproducciones.com</p>
+  </footer>
+
+  <script>
+    // SCROLL ANIMATIONS
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.package-card, .case-card, .testimonial, .video-item').forEach(el => {
+      observer.observe(el);
+    });
+
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
